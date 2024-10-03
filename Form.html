@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Feedback</title>
+    <style>
+      label {
+        float: left;
+        width: 150px;
+      }
+      #container {
+        width: 700px;
+        margin: auto;
+        background-color: beige;
+      }
+      main {
+        padding: 50px;
+      }
+      .error {
+        color: red;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <main>
+        <h2>Feedback</h2>
+        <h3>Love something? Hate something? Let us know!</h3>
+        Note : Fields marked with an asterisk(*) are mandatory
+        <br /><br />
+        <form id="feedbackForm" method="post" novalidate>
+          <label>Title*:</label>
+          <input type="radio" name="title" value="miss" required />Miss
+          <input type="radio" name="title" value="mr" required />Mr.
+          <input type="radio" name="title" value="mrs" required />Mrs.
+          <span class="error" id="titleError">Please select a title.</span>
+          <br /><br />
+
+          <label for="firstName">First Name*:</label>
+          <input type="text" id="firstName" placeholder="First Name" required />
+          <span class="error" id="firstNameError"></span>
+          <br /><br />
+
+          <label for="lastName">Last Name*:</label>
+          <input type="text" id="lastName" placeholder="Last Name" required />
+          <span class="error" id="lastNameError"></span>
+          <br /><br />
+
+          <label for="emailId">Email Id*:</label>
+          <input
+            type="email"
+            id="emailId"
+            placeholder="yourname@domain.com"
+            required
+          />
+          <span class="error" id="emailError"></span>
+          <br /><br />
+
+          <label for="phoneNumber">Phone Number*:</label>
+          <input
+            type="text"
+            id="phoneNumber"
+            placeholder="xxx-xxx-xxxx"
+            required
+          />
+          <span class="error" id="phoneError"></span>
+          <br /><br />
+
+          <label for="zipcode">ZipCode*:</label>
+          <input type="text" id="zipcode" placeholder="xxxxxx" required />
+          <span class="error" id="zipError"></span>
+          <br /><br />
+
+          <label>How did you hear*:</label>
+          <input type="checkbox" name="source" value="facebook" /> Facebook
+          <input type="checkbox" name="source" value="google" /> Google
+          <input type="checkbox" name="source" value="yelp" /> Yelp
+          <span class="error" id="sourceError"
+            >Please select at least one source.</span
+          >
+          <br /><br />
+
+          <label for="comments">Comments*:</label>
+          <textarea
+            id="comments"
+            placeholder="Your comments"
+            rows="5"
+            cols="25"
+            required
+          ></textarea>
+          <span class="error" id="commentsError"></span>
+          <br /><br />
+
+          <label for="optionSelect">Drink*:</label>
+          <select id="optionSelect">
+            <option value="">Select an option</option>
+            <option value="Option 1">Mocha</option>
+            <option value="Option 2">Java</option>
+            <option value="Option 3">Cappuccino</option>
+            <option value="Option 4">Americano</option>
+            <option value="Option 5">Latte</option>
+          </select>
+
+          <br />
+
+          <!-- Dynamic label and checkbox -->
+          <div id="dynamicContent" style="display: none">
+            <label id="dynamicLabel"></label>
+            <input type="checkbox" id="dynamicCheckbox" />
+          </div>
+
+          <br />
+
+          <!-- Textarea for additional customizations -->
+          <div id="customizationContent" style="display: none">
+            <label for="customizationTextarea"
+              >Add any additional customizations:*</label
+            >
+            <textarea id="customizationTextarea" rows="4" cols="50"></textarea>
+            <div
+              id="customizationError"
+              style="color: red; display: none"
+            ></div>
+          </div>
+
+          <br /><br />
+
+          <input type="submit" id="submitBtn" disabled />
+          <input type="reset" />
+        </form>
+      </main>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
