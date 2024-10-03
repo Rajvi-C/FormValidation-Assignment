@@ -1,13 +1,17 @@
 document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("feedbackForm");
   const submitBtn = document.getElementById("submitBtn");
+  const feedbackTable = document.getElementById("feedbackTable");
+  const feedbackTableBody = document.getElementById("feedbackTableBody");
+
+  feedbackTable.style.display = "none";
 
   const emailRegex = /^[^\s@]+@northeastern\.edu$/;
   const phoneRegex = /^\d{3}-\d{3}-\d{4}$/;
   const zipRegex = /^\d{6}$/;
   const nameRegex = /^[A-Za-z\s]+$/;
-  const textAreaRegex = /^[A-Za-z0-9\s]*$/; // Regex for custom text area (no special characters)
-  const commentsRegex = /^[A-Za-z0-9\s]*$/; // Regex for comments (no special characters)
+  const textAreaRegex = /^[A-Za-z0-9\s]*$/;
+  const commentsRegex = /^[A-Za-z0-9\s]*$/;
 
   const title = document.getElementsByName("title");
   const firstName = document.getElementById("firstName");
@@ -44,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
     phoneNumber: false,
     zipcode: false,
     comments: false,
-    customization: false, // Added for tracking custom textarea
+    customization: false,
   };
 
   function validateNotEmpty(
@@ -114,7 +118,6 @@ document.addEventListener("DOMContentLoaded", function () {
   function validateComments() {
     const commentValue = comments.value.trim();
 
-    // Check for empty value and length
     if (
       commentValue === "" ||
       commentValue.length < 10 ||
@@ -126,7 +129,6 @@ document.addEventListener("DOMContentLoaded", function () {
       return false;
     }
 
-    // Check for regex compliance (no special characters)
     if (!commentsRegex.test(commentValue)) {
       commentsError.style.display = "inline";
       commentsError.textContent =
@@ -134,7 +136,6 @@ document.addEventListener("DOMContentLoaded", function () {
       return false;
     }
 
-    // If both checks pass
     commentsError.style.display = "none";
     return true;
   }
@@ -143,7 +144,6 @@ document.addEventListener("DOMContentLoaded", function () {
     if (dynamicCheckbox.checked) {
       const textareaValue = customizationTextarea.value.trim();
 
-      // Check for empty value
       if (textareaValue === "") {
         customizationError.style.display = "inline";
         customizationError.textContent =
@@ -151,20 +151,18 @@ document.addEventListener("DOMContentLoaded", function () {
         return false;
       }
 
-      // Check for regex compliance (no special characters)
       if (!textAreaRegex.test(textareaValue)) {
         customizationError.style.display = "inline";
         customizationError.textContent =
-          "This can only contain letters, numbers, and spaces.";
+          "Custom text can only contain letters, numbers, and spaces.";
         return false;
       }
 
-      // If both checks pass
       customizationError.style.display = "none";
       return true;
     }
 
-    return true; // If checkbox is not checked, no need to validate textarea
+    return true;
   }
 
   function validateForm() {
@@ -193,8 +191,8 @@ document.addEventListener("DOMContentLoaded", function () {
       zipError,
       "Zip code must be 6 digits."
     );
-    const isCommentsValid = validateComments(); // Updated comments validation
-    const isCustomTextAreaValid = validateCustomization(); // Validate custom text area
+    const isCommentsValid = validateComments();
+    const isCustomTextAreaValid = validateCustomization();
     const isSourceValid = validateCheckboxes(source, sourceError);
 
     const allValid =
@@ -274,18 +272,48 @@ document.addEventListener("DOMContentLoaded", function () {
   setupFieldValidation(zipcode, zipError, () =>
     validateRegex(zipcode, zipRegex, zipError, "Zip code must be 6 digits.")
   );
+  setupFieldValidation(comments, commentsError, validateComments);
   setupFieldValidation(
-    comments,
-    commentsError,
-    () => validateComments() // Validate comments
+    customizationTextarea,
+    customizationError,
+    validateCustomization
   );
 
-  for (const checkbox of source) {
-    checkbox.addEventListener("change", () =>
-      validateCheckboxes(source, sourceError)
-    );
-  }
+  const submitFeedback = (event) => {
+    event.preventDefault();
+    const feedbackRow = document.createElement("tr");
+    feedbackRow.innerHTML = `
+        <td>${firstName.value}</td>
+        <td>${lastName.value}</td>
+        <td>${emailId.value}</td>
+        <td>${phoneNumber.value}</td>
+        <td>${zipcode.value}</td>
+        <td>${comments.value}</td>
+        <td>${customizationTextarea.value}</td>
+      `;
 
-  form.addEventListener("input", validateForm);
-  form.addEventListener("change", validateForm);
+    feedbackTableBody.appendChild(feedbackRow);
+    feedbackTable.style.display = "table";
+
+    form.reset();
+    submitBtn.disabled = true;
+  };
+
+  form.addEventListener("submit", submitFeedback);
+
+  [
+    firstName,
+    lastName,
+    emailId,
+    phoneNumber,
+    zipcode,
+    comments,
+    customizationTextarea,
+  ].forEach((field) => {
+    field.addEventListener("input", validateForm);
+  });
+
+  Array.from(source).forEach((checkbox) => {
+    checkbox.addEventListener("change", validateForm);
+  });
 });
